@@ -1,0 +1,35 @@
+[user]
+	name = Cyril Krylatov
+	email = cyril.krylatov+github@gmail.com
+[alias]
+    st = status -sb
+    mvi = "!sh -c 'git mv $0 foo.bar; git mv foo.bar $1'"
+    next = "!sh -c 'git log --reverse --format=%H `git rev-parse --verify HEAD`..master | head -1 | xargs git checkout'"
+    previous = checkout HEAD~1
+    amend = commit --amend --no-edit
+    rebase-master = pull --rebase origin master
+    pushu = "!git push -u origin \"$(git rev-parse --abbrev-ref HEAD)\""
+    pr = "!open \"$(git remote -v | grep origin | grep push | cut -f 2 | cut -d \" \" -f 1 | sed -e \"s|git@\\(.*\\):\\(.*\\).git|https://\\1/\\2|\")/pull/new/$(git rev-parse --abbrev-ref HEAD)\""
+    demo = "!sh -c 'git branch -D demo && git checkout -b demo && git push --force origin demo && git checkout -'"
+    ignore = update-index --assume-unchanged
+    unignore = update-index --no-assume-unchanged
+[color]
+    ui = true
+[push]
+    default = simple
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+    required = true
+	process = git-lfs filter-process
+[merge]
+    tool = diffmerge
+[mergetool "diffmerge"]
+    cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
+    trustExitCode = true
+[diff]
+    tool = diffmerge
+[difftool "diffmerge"]
+    cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[pull]
+	rebase = true
